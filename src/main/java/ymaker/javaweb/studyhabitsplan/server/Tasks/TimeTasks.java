@@ -2,6 +2,7 @@ package ymaker.javaweb.studyhabitsplan.server.Tasks;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ymaker.javaweb.studyhabitsplan.common.Context.BaseContext;
@@ -10,6 +11,7 @@ import ymaker.javaweb.studyhabitsplan.server.WebSocket.WebSocketServer;
 import ymaker.javaweb.studyhabitsplan.server.service.StudyPlanService;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,9 +22,10 @@ public class TimeTasks {
     StudyPlanService studyPlanMapperService;
     @Autowired
     WebSocketServer webSocketServer;
-
-    @Scheduled(cron = "0 * * * * *")//设置为每分钟触发一次
-    public void remindtask() {
+    @Autowired
+    RedisTemplate<String,Object> redisTemplate;
+    /*@Scheduled(cron = "0 * * * * *")//设置为每分钟触发一次*/
+   /* public void remindtask() {
         String currentUsername = BaseContext.getCurrentUsername();
         Date now = new Date();
         List<StudyPlan> studyPlanByTime = studyPlanMapperService.getStudyPlanByTime(null, now, currentUsername);
@@ -55,8 +58,15 @@ public class TimeTasks {
         Date date=new Date();
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String current = simpleDateFormat.format(date);
-        List<StudyPlan> studyPlanByTime = studyPlanMapperService.getStudyPlanByTime(date, null, currentUsername);
-
+        Object o = redisTemplate.opsForValue().get("reminder_time");
+        List<StudyPlan> studyPlanByTime=new ArrayList<>();
+        if(o==null){
+            studyPlanByTime = studyPlanMapperService.getStudyPlanByTime(date, null, currentUsername);
+            redisTemplate.opsForValue().set("reminder_time",studyPlanByTime);
+        }
+        else {
+            studyPlanByTime=(List<StudyPlan>) o;
+        }
         for (StudyPlan studyPlan:studyPlanByTime) {
             String[] split = studyPlan.getReminder_time().split("//");
             for (String s:split) {
@@ -68,7 +78,7 @@ public class TimeTasks {
         }
 
 
-    }
+    }*/
 
 
 }

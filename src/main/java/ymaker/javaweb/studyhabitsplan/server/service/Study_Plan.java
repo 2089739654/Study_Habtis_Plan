@@ -13,7 +13,7 @@ public interface Study_Plan {
 
     public List<StudyPlan> getAllStudyPlan(String username);
 
-    public void addStudyPlan(StudyPlan studyPlan);
+    public int addStudyPlan(StudyPlan studyPlan);
     public void deleteStudyPlan(int id);
 
     public void updateStudyPlan(StudyPlan studyPlan);
@@ -21,4 +21,6 @@ public interface Study_Plan {
     public List<StudyPlan> getStudyPlanByTime(Date startTime,Date endTime,String username);
 
     public List<StudyPlan> getStudyPlanByStatus(int status);
+
+    public List<StudyPlan> getStudyPlanByFinishTime(Date startTime,Date endTime,String username);
 }

@@ -26,8 +26,8 @@ public class User_Controllers {
     public Userservice userservice;
     @PostMapping("/register")
     @ApiOperation("用户注册")
-    public Result register(String username, String password) {
-            userservice.register(username,password);
+    public Result register(@RequestBody User user) {
+            userservice.register(user.getUsername(),user.getPassword());
             return Result.success();
         }
         @PostMapping("/login")
@@ -38,7 +38,7 @@ public class User_Controllers {
 
             //登录成功后，生成jwt令牌
                 Map<String, Object> claims = new HashMap<>();
-                claims.put("userid",a.getId());
+                claims.put("username",a.getUsername());
                 String token = JwtUtil.createJWT(
                         "Misaka",
                         3600000L,

@@ -43,8 +43,11 @@ public class StudyPlanService implements Study_Plan {
     }
 
     @Override
-    public void addStudyPlan(StudyPlan studyPlan) {
+    public int addStudyPlan(StudyPlan studyPlan) {
+        String currentUsername = BaseContext.getCurrentUsername();
+        studyPlan.setUsername(currentUsername);
         studyPlanMapper.insert(studyPlan);
+        return studyPlan.getId();
     }
 
     @Override
@@ -76,4 +79,17 @@ public class StudyPlanService implements Study_Plan {
         queryWrapper.eq("username",username).eq("status",status);
         return studyPlanMapper.selectList(queryWrapper);
     }
+
+    public List<StudyPlan> getStudyPlanByFinishTime(Date startTime,Date endTime,String username){
+        QueryWrapper<StudyPlan> queryWrapper=new QueryWrapper<>();
+        if(startTime!=null){
+            queryWrapper.ge("finish_time",startTime);
+        }
+        if(endTime!=null){
+            queryWrapper.lt("finish_time",endTime);
+        }
+        queryWrapper.eq("username",username);
+        return studyPlanMapper.selectList(queryWrapper);
+    }
+
 }

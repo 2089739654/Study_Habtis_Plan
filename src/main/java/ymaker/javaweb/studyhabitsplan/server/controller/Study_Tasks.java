@@ -3,6 +3,7 @@ package ymaker.javaweb.studyhabitsplan.server.controller;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ymaker.javaweb.studyhabitsplan.common.Context.BaseContext;
 import ymaker.javaweb.studyhabitsplan.common.Result.Result;
 
 @RestController
@@ -12,12 +13,17 @@ import ymaker.javaweb.studyhabitsplan.common.Result.Result;
 public class Study_Tasks {
     @PostMapping("/insert")
     public Result insert() {
+        BaseContext.setCurrentUsername("qwer");
+
+
         return Result.success("OK");
     }
 
     @PutMapping("/delete")
     public Result delete() {
-        return Result.success();
+        String currentUsername = BaseContext.getCurrentUsername();
+
+        return Result.success(currentUsername);
     }
 
     @GetMapping("/select")
